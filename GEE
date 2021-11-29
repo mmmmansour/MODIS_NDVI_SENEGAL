@@ -1,0 +1,54 @@
+print(modis.size())
+var Modis_NDVI = modis.select('NDVI')
+var filter_date = Modis_NDVI.filterDate('2021-01-01','2021-01-30')
+var filter_date1 = Modis_NDVI.filterDate('2021-03-01','2021-03-30')
+var filter_date2 = Modis_NDVI.filterDate('2021-06-01','2021-06-30')
+var filter_date3 = Modis_NDVI.filterDate('2021-08-01','2021-08-30')
+var filter_date4 = Modis_NDVI.filterDate('2021-09-01','2021-09-30')
+print(filter_date.size())
+var mean_ndvi = filter_date.reduce(ee.Reducer.mean())
+var mean_ndvi1 = filter_date1.reduce(ee.Reducer.mean())
+var mean_ndvi2 = filter_date2.reduce(ee.Reducer.mean())
+var mean_ndvi3 = filter_date3.reduce(ee.Reducer.mean())
+var mean_ndvi4 = filter_date4.reduce(ee.Reducer.mean())
+var ndviVis = {
+  min: 0.0,
+  max: 8000.0,
+  palette: [
+    'FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901',
+    '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01',
+    '012E01', '011D01', '011301'
+  ],
+};
+
+
+var ndvi_senegal = mean_ndvi.clip(senegal)
+var ndvi_senegala = mean_ndvi1.clip(senegal)
+var ndvi_senegalb = mean_ndvi2.clip(senegal)
+var ndvi_senegalc = mean_ndvi3.clip(senegal)
+var ndvi_senegald = mean_ndvi4.clip(senegal)
+Map.addLayer(ndvi_senegal,ndviVis)
+Map.addLayer(ndvi_senegala,ndviVis)
+Map.addLayer(ndvi_senegalb,ndviVis)
+Map.addLayer(ndvi_senegalc,ndviVis)
+Map.addLayer(ndvi_senegald,ndviVis)
+Export.image.toDrive({
+  image : ndvi_senegal,
+  description : 'ndvi_senegal',
+  folder :'GEE',
+  region : senegal,
+  scale : 250,
+  maxPixels : 1e13
+  })
+
+
+
+Export.image.toDrive({
+  image : ndvi_senegala,
+  description : 'ndvi_senegala',
+  folder :'GEE',
+  region : senegal,
+  scale : 250,
+  maxPixels : 1e13
+  })
+
